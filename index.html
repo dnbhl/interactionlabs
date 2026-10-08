@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaction Labs - Online Design School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="variables.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-body);
+            color: var(--color-text-dark);
+            background-color: var(--color-bg-secondary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-family-headings);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 6rem;
+        }
+
+
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+
+        .bg-lavender { background-color: var(--color-bg-primary); }
+        .bg-cream { background-color: var(--color-bg-secondary); }
+        .bg-sky { background-color: var(--color-bg-tertiary); }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-accent-teal), var(--color-text-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Typography */
+
+        .display-huge {
+            font-size: 80px;
+            line-height: 0.9;
+            letter-spacing: -2px;
+        }
+
+        .header-big {
+            font-size: 48px;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .header-sub {
+            font-size: 24px;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        .body-large {
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            line-height: 1.4;
+            color: var(--color-text-secondary);
+        }
+
+        .body-standard {
+            font-size: 16px;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            color: var(--color-gray-dark);
+        }
+
+
+
+
+
+
+        /* Components */
+        .pill {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 500px;
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.5;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-decoration: none;
+        }
+
+
+        .pill-primary {
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+        }
+
+        .pill-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(91, 82, 146, 0.2);
+        }
+
+        .pill-outline {
+            border-color: var(--color-text-primary);
+            color: var(--color-text-primary);
+            background-color: transparent;
+        }
+
+        .pill-outline:hover {
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 500px;
+            font-family: var(--font-family-body);
+            font-size: 0.85rem;
+            background-color: rgba(91, 82, 146, 0.08);
+            color: var(--color-text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Header Navigation */
+        header {
+            padding: 2.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center; /* Ensure vertical alignment */
+        }
+
+        .nav-links a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+
+        .nav-links a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Shape Integration */
+        .shape-bg {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-shape {
+            top: -140px;
+            right: -110px;
+            width: 460px;
+            opacity: 0.7;
+            animation: float 20s infinite linear;
+            filter: blur(60px); /* Smooth out pixelation */
+        }
+
+        .hero-shape-2 {
+            bottom: -30%;
+            left: -20%;
+            width: 700px;
+            opacity: 0.4;
+            filter: blur(80px); /* Stronger blur for background */
+        }
+
+
+        .venn-shape {
+            position: absolute;
+            right: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 800px;
+            opacity: 0.8;
+        }
+
+        .knot-shape {
+            position: absolute;
+            left: -4%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 680px;
+            max-width: 50vw;
+            opacity: 1;
+            z-index: 0;
+            filter: drop-shadow(0 20px 40px rgba(91, 82, 146, 0.12));
+            pointer-events: none;
+        }
+
+        .hero-ribbon {
+            right: -5%;
+            top: 15%;
+            width: 700px;
+            opacity: 0.9;
+            z-index: 0;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1)); /* Add depth */
+        }
+
+
+        .curriculum-shape {
+            left: -10%;
+            bottom: -10%;
+            width: 500px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        /* Smooth scroll for in-page links (e.g. Request Early Access) */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Early Access / Waitlist */
+        .early-access-shape {
+            right: 8%;
+            top: 50%;
+            width: 360px;
+            opacity: 0.65;
+            transform: translateY(-50%) rotate(-19deg) scaleY(-1); /* Same treatment as the deck's statistics slide */
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 560px;
+        }
+
+        .waitlist-input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.8rem 1.5rem;
+            border-radius: 500px;
+            border: 1px solid rgba(91, 82, 146, 0.25);
+            background-color: var(--color-text-light);
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .waitlist-input::placeholder {
+            color: var(--color-gray-dark);
+        }
+
+        .waitlist-input:focus {
+            outline: none;
+            border-color: var(--color-text-primary);
+            box-shadow: 0 0 0 4px rgba(91, 82, 146, 0.12);
+        }
+
+        @media (max-width: 1100px) {
+            .early-access-shape {
+                display: none;
+            }
+            .knot-shape {
+                opacity: 0.18;
+                left: -20%;
+                width: 520px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .waitlist-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Snackbar (waitlist confirmation) */
+        .snackbar {
+            position: fixed;
+            left: 50%;
+            bottom: 2rem;
+            width: max-content;
+            max-width: calc(100vw - 2rem);
+            transform: translate(-50%, 1rem);
+            padding: 1rem 1.75rem;
+            border-radius: 500px;
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(91, 82, 146, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 200;
+        }
+
+        .snackbar.is-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body class="bg-cream">
+
+    <header>
+        <div class="container nav-wrapper">
+            <a href="#" class="logo">
+                <img src="assets/logo.svg" alt="Interaction Labs Logo" style="height: 24px; width: auto;">
+            </a>
+
+
+            <nav class="nav-links">
+                <a href="#philosophy">Philosophy</a>
+                <a href="#curriculum">Curriculum</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="section bg-lavender" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <!-- Large Background Shape -->
+        <img src="assets/holographic-blobs.png" class="shape-bg hero-shape" alt="">
+        <img src="assets/blur-blob-lavender.svg" class="shape-bg hero-shape-2" alt="">
+        <img src="assets/ribbon-knot.png" class="shape-bg hero-ribbon" alt="">
+
+
+
+
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="max-width: 900px;">
+                <span class="badge" style="margin-bottom: 2rem;">INTERACTION LABS // SCHOOL OF DESIGN</span>
+
+
+                <h1 class="display-huge" style="margin-bottom: 2.5rem;"><span style="color: var(--color-text-primary);">Design with intent.</span><br><span style="color: var(--color-accent-teal);">Build for scale.</span></h1>
+                <p class="body-large" style="margin-bottom: 4rem; max-width: 700px;">
+                    A rigorous, practice-led school for digital product designers ready to master interactive craft, systems architecture, and product strategy.
+                </p>
+
+                <div style="display: flex; gap: 1.5rem;">
+                    <a href="#early-access" class="pill pill-outline">Request Early Access</a>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="section bg-cream" id="philosophy" style="overflow: hidden;">
+        <!-- Glass Knot Shape as Accents -->
+        <img src="assets/ribbon-knot-purple.png?v=2" class="shape-bg knot-shape" alt="Interactive Ribbon Knot">
+
+        <div class="container" style="display: flex; justify-content: flex-end; position: relative; z-index: 1;">
+            <div style="max-width: 600px;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Core Philosophy</span>
+                <h2 class="header-big" style="margin-bottom: 3rem;">Minimal, focused, deeply practical.</h2>
+                <p class="body-standard" style="margin-bottom: 2rem;">
+                    We bridge the gap between traditional design principles and modern digital reality. We don't just teach tools; we teach systemic thinking.
+                </p>
+                <p class="body-standard" style="margin-bottom: 4rem;">
+                    Go beyond interfaces. Learn to design scalable systems and understand complex interactions.
+                </p>
+                
+                <!-- Stats Row -->
+                <div style="display: flex; gap: 4rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 3rem;">
+                    <div>
+                        <div style="font-family: var(--font-family-headings); font-size: 48px; font-weight: 500; line-height: 1; color: var(--color-text-primary);">100%</div>
+                        <div style="font-family: var(--font-family-body); font-size: 0.85rem; text-transform: uppercase; margin-top: 0.5rem; color: var(--color-gray-dark);">Practice</div>
+                    </div>
+                    <div>
+                        <div style="font-family: var(--font-family-headings); font-size: 48px; font-weight: 500; line-height: 1; color: var(--color-accent-teal);">85%</div>
+
+                        <div style="font-family: var(--font-family-body); font-size: 0.85rem; text-transform: uppercase; margin-top: 0.5rem; color: var(--color-gray-dark);">Systemic</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlap / Venn Section (About) -->
+    <section class="section bg-sky" id="about" style="overflow: hidden; padding: 12rem 0;">
+        <!-- Venn Diagram Shape -->
+        <img src="assets/venn.svg" class="shape-bg venn-shape" alt="">
+
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="max-width: 600px;">
+                <span class="badge" style="margin-bottom: 1.5rem; background-color: white;">The Overlap</span>
+                <h2 class="header-big" style="margin-bottom: 3rem;">Where Art Meets <br><span style="color: var(--color-accent-teal);">Engineering</span></h2>
+                <p class="body-standard" style="margin-bottom: 3rem; color: var(--color-text-secondary);">
+                    Our curriculum sits at the intersection of human psychology, visual arts, and technology. We believe the future of design belongs to those who understand all three.
+                </p>
+                <a href="#curriculum" class="pill pill-outline">Explore Overlap</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="section bg-cream" id="curriculum" style="overflow: hidden;">
+        <!-- Background Shape -->
+        <img src="assets/blur-blob-violet.svg" class="shape-bg curriculum-shape" alt="">
+
+        <div class="container">
+
+            <span class="badge" style="margin-bottom: 1.5rem;">Curriculum</span>
+            <h2 class="header-big" style="margin-bottom: 6rem;">Master the Stack</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5rem;">
+                
+                <!-- Module 1 -->
+                <div>
+                    <div style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 01</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Foundations of Interaction</h3>
+                    <p class="body-standard">Master the core principles of human-computer interaction, mental models, and focused research.</p>
+                </div>
+
+                <!-- Module 2 -->
+                <div>
+                    <div style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 02</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Prototyping & Motion</h3>
+                    <p class="body-standard">Bring interfaces to life. Learn advanced prototyping and the psychology of motion.</p>
+                </div>
+
+                <!-- Module 3 -->
+                <div>
+                    <div style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 03</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Design Systems at Scale</h3>
+                    <p class="body-standard">Build and maintain scalable libraries that power digital products and unified experiences.</p>
+                </div>
+
+                <!-- Module 4 -->
+                <div>
+                    <div style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 04</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Product Strategy</h3>
+                    <p class="body-standard">Connect design to business value, user needs, and engineering feasibility.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="early-access" style="overflow: hidden; background-color: #f8f6ff;">
+        <!-- Glass Blob Accent -->
+        <img src="assets/holographic-blobs.png" class="shape-bg early-access-shape" alt="">
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="max-width: 640px;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Early Access</span>
+                <h2 style="font-size: 36px; font-weight: 500; margin-bottom: 1.5rem; color: var(--color-text-secondary); line-height: 1.1; letter-spacing: -0.5px;">Request early access.<br><span style="color: rgba(77, 88, 140, 0.7);">Join the first cohort.</span></h2>
+                <p class="body-standard" style="margin-bottom: 3rem; color: var(--color-text-secondary);">
+                    Be the first to know when enrollment opens.
+                </p>
+                <form class="waitlist-form" id="waitlist-form" method="post">
+                    <label for="waitlist-email" class="visually-hidden">Email address</label>
+                    <input type="email" id="waitlist-email" name="email" class="waitlist-input" placeholder="Enter your email address..." autocomplete="email" maxlength="254" required>
+                    <button type="submit" class="pill pill-primary">Join Waitlist &rarr;</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 2rem 0; background-color: var(--color-bg-secondary); border-top: 1px solid rgba(0,0,0,0.05);">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <img src="assets/logo-grey.svg" alt="Interaction Labs Logo" style="height: 24px; width: auto;">
+                <p style="font-family: var(--font-family-body); font-size: 0.85rem; color: var(--color-gray-dark); margin-top: 0.5rem;">INTERACTION LABS &copy; 2025</p>
+            </div>
+            <div style="font-family: var(--font-family-body); font-size: 0.9rem; color: var(--color-gray-dark);">
+                Crafted for the future of digital products.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Snackbar (waitlist confirmation) -->
+    <div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+
+    <script>
+        // Waitlist form: confirm locally with a snackbar instead of navigating away.
+        // TODO(security): No backend yet, so the email is not sent or stored anywhere.
+        // When connecting a waitlist service: POST over HTTPS, validate and rate-limit
+        // server-side, add CSRF protection if cookies are used, and serve this page with
+        // a strict CSP (hash or nonce for this inline script) and anti-clickjacking headers.
+        (function () {
+            var form = document.getElementById('waitlist-form');
+            var snackbar = document.getElementById('snackbar');
+            var hideTimer;
+
+            // Native validation (type="email" + required) blocks invalid submissions before this runs.
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                form.reset();
+
+                snackbar.textContent = 'Thank you! You\u2019re on the waitlist. We\u2019ll be in touch soon.';
+                snackbar.classList.add('is-visible');
+
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(function () {
+                    snackbar.classList.remove('is-visible');
+                }, 4000);
+            });
+        })();
+    </script>
+
+</body>
+</html>
