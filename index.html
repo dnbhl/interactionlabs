@@ -550,20 +550,28 @@
 </head>
 <body class="bg-cream">
 
-    <header>
+       <header>
         <div class="container nav-wrapper">
             <a href="#" class="logo">
                 <img src="assets/logo.svg" alt="Interaction Labs Logo" style="height: 24px; width: auto;">
             </a>
 
+            <!-- Mobile Hamburger Toggle -->
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+            </button>
 
-            <nav class="nav-links">
+            <!-- Nav Links with Mobile Glass Overlay -->
+            <nav class="nav-links" id="nav-links">
                 <a href="#philosophy">Philosophy</a>
                 <a href="#curriculum">Curriculum</a>
                 <a href="#about">About</a>
+                <a href="#early-access" class="mobile-nav-cta pill pill-outline">Request Early Access</a>
             </nav>
         </div>
     </header>
+
 
     <!-- Hero Section -->
     <section class="section bg-lavender" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;">
