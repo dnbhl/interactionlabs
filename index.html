@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaction Labs - Online Design School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="variables.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-body);
+            color: var(--color-text-dark);
+            background-color: var(--color-bg-secondary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-family-headings);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 6rem;
+        }
+
+
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+
+        .bg-lavender { background-color: var(--color-bg-primary); }
+        .bg-cream { background-color: var(--color-bg-secondary); }
+        .bg-sky { background-color: var(--color-bg-tertiary); }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-accent-teal), var(--color-text-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Typography */
+
+        .display-huge {
+            font-size: 80px;
+            line-height: 0.9;
+            letter-spacing: -2px;
+        }
+
+        .header-big {
+            font-size: 48px;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .header-sub {
+            font-size: 24px;
+            line-height: 1.2;
+            letter-spacing: 0;
+        }
+
+        .body-large {
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            line-height: 1.4;
+            color: var(--color-text-secondary);
+        }
+
+        .body-standard {
+            font-size: 16px;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            color: var(--color-gray-dark);
+        }
+
+
+
+
+
+
+        /* Components */
+        .pill {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 500px;
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.5;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-decoration: none;
+        }
+
+
+        .pill-primary {
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+        }
+
+        .pill-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(91, 82, 146, 0.2);
+        }
+
+        .pill-outline {
+            border-color: var(--color-text-primary);
+            color: var(--color-text-primary);
+            background-color: transparent;
+        }
+
+        .pill-outline:hover {
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(91, 82, 146, 0.18);
+        }
+
+        .pill:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+            border-radius: 500px;
+            font-family: var(--font-family-body);
+            font-size: 0.85rem;
+            background-color: rgba(91, 82, 146, 0.08);
+            color: var(--color-text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .badge-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-accent-teal);
+            margin-right: 10px;
+            box-shadow: 0 0 8px rgba(0, 194, 184, 0.6);
+            animation: pulse-dot 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.35;
+                transform: scale(0.75);
+            }
+        }
+
+        /* Header Navigation */
+        header {
+            padding: 2.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 1.5px;
+            background-color: var(--color-accent-teal);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Shape Integration */
+        .shape-bg {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-shape {
+            top: -140px;
+            right: -110px;
+            width: 460px;
+            opacity: 0.7;
+            animation: float 20s infinite linear;
+            filter: blur(60px); /* Smooth out pixelation */
+        }
+
+        .hero-shape-2 {
+            bottom: -30%;
+            left: -20%;
+            width: 700px;
+            opacity: 0.4;
+            filter: blur(80px); /* Stronger blur for background */
+        }
+
+
+        .venn-shape {
+            position: absolute;
+            right: -10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 800px;
+            opacity: 0.8;
+            animation: float-venn 13s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .knot-shape-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        .knot-shape {
+            position: absolute;
+            left: -4%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 680px;
+            max-width: 50vw;
+            opacity: 1;
+            z-index: 0;
+            filter: drop-shadow(0 20px 40px rgba(91, 82, 146, 0.12));
+            pointer-events: none;
+            animation: float-knot 10.5s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .hero-ribbon-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+
+        .hero-ribbon {
+            right: -5%;
+            top: 15%;
+            width: 700px;
+            opacity: 0.9;
+            z-index: 0;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+            animation: float-hero 8.5s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .curriculum-shape {
+            left: -10%;
+            bottom: -10%;
+            width: 500px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        /* Smooth scroll for in-page links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Early Access / Waitlist */
+        .early-access-shape {
+            right: 8%;
+            top: 50%;
+            width: 360px;
+            opacity: 0.65;
+            transform: translateY(-50%) rotate(-19deg) scaleY(-1);
+            animation: float-early 8.5s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 560px;
+        }
+
+        .waitlist-form .pill-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .waitlist-form .pill-primary .btn-arrow {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .waitlist-form .pill-primary:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+
+        .waitlist-input {
+            flex: 1;
+            min-width: 0;
+            padding: 0.8rem 1.5rem;
+            border-radius: 500px;
+            border: 1px solid rgba(91, 82, 146, 0.25);
+            background-color: var(--color-text-light);
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--color-text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .waitlist-input::placeholder {
+            color: var(--color-gray-dark);
+        }
+
+        .waitlist-input:focus {
+            outline: none;
+            border-color: var(--color-text-primary);
+            box-shadow: 0 0 0 4px rgba(91, 82, 146, 0.12);
+        }
+
+        /* Curriculum Card Hover Micro-interaction */
+        .curriculum-card {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .curriculum-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .curriculum-card .module-num {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
+        }
+
+        .curriculum-card:hover .module-num {
+            transform: translateX(4px);
+            color: var(--color-text-primary) !important;
+        }
+
+        /* Subtle Scroll Reveals */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.08s; }
+        .delay-2 { transition-delay: 0.16s; }
+        .delay-3 { transition-delay: 0.24s; }
+        .delay-4 { transition-delay: 0.32s; }
+
+        @media (max-width: 1100px) {
+            .early-access-shape {
+                display: none;
+            }
+            .knot-shape {
+                opacity: 0.18;
+                left: -20%;
+                width: 520px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .waitlist-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Snackbar (waitlist confirmation) */
+        .snackbar {
+            position: fixed;
+            left: 50%;
+            bottom: 2rem;
+            width: max-content;
+            max-width: calc(100vw - 2rem);
+            transform: translate(-50%, 1rem);
+            padding: 1rem 1.75rem;
+            border-radius: 500px;
+            background-color: var(--color-text-primary);
+            color: var(--color-text-light);
+            font-family: var(--font-family-body);
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(91, 82, 146, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 200;
+        }
+
+        .snackbar.is-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Gentle Floating 3D Keyframes */
+        @keyframes float-hero {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-16px) rotate(1.2deg);
+            }
+        }
+
+        @keyframes float-knot {
+            0%, 100% {
+                transform: translateY(-50%) rotate(0deg);
+            }
+            50% {
+                transform: translateY(calc(-50% - 14px)) rotate(-1.5deg);
+            }
+        }
+
+        @keyframes float-venn {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(calc(-50% - 10px)) scale(1.018);
+            }
+        }
+
+        @keyframes float-early {
+            0%, 100% {
+                transform: translateY(-50%) rotate(-19deg) scaleY(-1);
+            }
+            50% {
+                transform: translateY(calc(-50% - 12px)) rotate(-16deg) scaleY(-1);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            .hero-shape,
+            .hero-ribbon,
+            .knot-shape,
+            .venn-shape,
+            .early-access-shape,
+            .badge-dot {
+                animation: none !important;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+                transition: none !important;
+            }
+            .curriculum-card,
+            .curriculum-card:hover,
+            .curriculum-card .module-num,
+            .curriculum-card:hover .module-num,
+            .pill,
+            .pill:hover,
+            .pill:active,
+            .pill-outline,
+            .pill-outline:hover,
+            .waitlist-form .pill-primary:hover .btn-arrow {
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-cream">
+
+    <header>
+        <div class="container nav-wrapper">
+            <a href="#" class="logo">
+                <img src="assets/logo.svg" alt="Interaction Labs Logo" style="height: 24px; width: auto;">
+            </a>
+
+
+            <nav class="nav-links">
+                <a href="#philosophy">Philosophy</a>
+                <a href="#curriculum">Curriculum</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="section bg-lavender" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <!-- Large Background Shape -->
+        <img src="assets/holographic-blobs.png" class="shape-bg hero-shape" alt="">
+        <img src="assets/blur-blob-lavender.svg" class="shape-bg hero-shape-2" alt="">
+        <div class="hero-ribbon-wrapper">
+            <img src="assets/ribbon-knot.png" class="shape-bg hero-ribbon" alt="">
+        </div>
+
+        <div class="container" style="position: relative; z-index: 1;">
+            <div style="max-width: 900px;">
+                <span class="badge" style="margin-bottom: 2rem;"><span class="badge-dot"></span>INTERACTION LABS // SCHOOL OF DESIGN</span>
+
+                <h1 class="display-huge" style="margin-bottom: 2.5rem;"><span style="color: var(--color-text-primary);">Design with intent.</span><br><span style="color: var(--color-accent-teal);">Build for scale.</span></h1>
+                <p class="body-large" style="margin-bottom: 4rem; max-width: 700px;">
+                    A rigorous, practice-led school for digital product designers ready to master interactive craft, systems architecture, and product strategy.
+                </p>
+
+                <div style="display: flex; gap: 1.5rem;">
+                    <a href="#early-access" class="pill pill-outline">Request Early Access</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="section bg-cream" id="philosophy" style="overflow: hidden;">
+        <!-- Glass Knot Shape as Accents -->
+        <div class="knot-shape-wrapper">
+            <img src="assets/ribbon-knot-purple.png?v=2" class="shape-bg knot-shape" alt="Interactive Ribbon Knot">
+        </div>
+
+        <div class="container reveal" style="display: flex; justify-content: flex-end; position: relative; z-index: 1;">
+            <div style="max-width: 600px;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Core Philosophy</span>
+                <h2 class="header-big" style="margin-bottom: 3rem;">Minimal, focused, deeply practical.</h2>
+                <p class="body-standard" style="margin-bottom: 2rem;">
+                    We bridge the gap between traditional design principles and modern digital reality. We don't just teach tools; we teach systemic thinking.
+                </p>
+                <p class="body-standard" style="margin-bottom: 4rem;">
+                    Go beyond interfaces. Learn to design scalable systems and understand complex interactions.
+                </p>
+                
+                <!-- Stats Row -->
+                <div style="display: flex; gap: 4rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 3rem;">
+                    <div>
+                        <div class="stat-counter" data-target="100" data-suffix="%" style="font-family: var(--font-family-headings); font-size: 48px; font-weight: 500; line-height: 1; color: var(--color-text-primary);">100%</div>
+                        <div style="font-family: var(--font-family-body); font-size: 0.85rem; text-transform: uppercase; margin-top: 0.5rem; color: var(--color-gray-dark);">Practice</div>
+                    </div>
+                    <div>
+                        <div class="stat-counter" data-target="85" data-suffix="%" style="font-family: var(--font-family-headings); font-size: 48px; font-weight: 500; line-height: 1; color: var(--color-accent-teal);">85%</div>
+                        <div style="font-family: var(--font-family-body); font-size: 0.85rem; text-transform: uppercase; margin-top: 0.5rem; color: var(--color-gray-dark);">Systemic</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overlap / Venn Section (About) -->
+    <section class="section bg-sky" id="about" style="overflow: hidden; padding: 12rem 0;">
+        <!-- Venn Diagram Shape -->
+        <img src="assets/venn.svg" class="shape-bg venn-shape" alt="">
+
+        <div class="container reveal" style="position: relative; z-index: 1;">
+            <div style="max-width: 600px;">
+                <span class="badge" style="margin-bottom: 1.5rem; background-color: white;">The Overlap</span>
+                <h2 class="header-big" style="margin-bottom: 3rem;">Where Art Meets <br><span style="color: var(--color-accent-teal);">Engineering</span></h2>
+                <p class="body-standard" style="margin-bottom: 3rem; color: var(--color-text-secondary);">
+                    Our curriculum sits at the intersection of human psychology, visual arts, and technology. We believe the future of design belongs to those who understand all three.
+                </p>
+                <a href="#curriculum" class="pill pill-outline">Explore Overlap</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="section bg-cream" id="curriculum" style="overflow: hidden;">
+        <!-- Background Shape -->
+        <img src="assets/blur-blob-violet.svg" class="shape-bg curriculum-shape" alt="">
+
+        <div class="container">
+
+            <div class="reveal" style="max-width: 600px; margin-bottom: 6rem;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Curriculum</span>
+                <h2 class="header-big">Master the Stack</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5rem;">
+                
+                <!-- Module 1 -->
+                <div class="curriculum-card reveal delay-1">
+                    <div class="module-num" style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 01</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Foundations of Interaction</h3>
+                    <p class="body-standard">Master the core principles of human-computer interaction, mental models, and focused research.</p>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="curriculum-card reveal delay-2">
+                    <div class="module-num" style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 02</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Prototyping & Motion</h3>
+                    <p class="body-standard">Bring interfaces to life. Learn advanced prototyping and the psychology of motion.</p>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="curriculum-card reveal delay-3">
+                    <div class="module-num" style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 03</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Design Systems at Scale</h3>
+                    <p class="body-standard">Build and maintain scalable libraries that power digital products and unified experiences.</p>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="curriculum-card reveal delay-4">
+                    <div class="module-num" style="font-family: var(--font-family-body); color: var(--color-accent-teal); font-size: 0.95rem; margin-bottom: 1rem;">// 04</div>
+                    <h3 class="header-sub" style="margin-bottom: 1.5rem;">Product Strategy</h3>
+                    <p class="body-standard">Connect design to business value, user needs, and engineering feasibility.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="early-access" style="overflow: hidden; background-color: #f8f6ff;">
+        <!-- Glass Blob Accent -->
+        <img src="assets/holographic-blobs.png" class="shape-bg early-access-shape" alt="">
+        <div class="container reveal" style="position: relative; z-index: 1;">
+            <div style="max-width: 640px;">
+                <span class="badge" style="margin-bottom: 1.5rem;">Early Access</span>
+                <h2 style="font-size: 36px; font-weight: 500; margin-bottom: 1.5rem; color: var(--color-text-secondary); line-height: 1.1; letter-spacing: -0.5px;">Request early access.<br><span style="color: rgba(77, 88, 140, 0.7);">Join the first cohort.</span></h2>
+                <p class="body-standard" style="margin-bottom: 3rem; color: var(--color-text-secondary);">
+                    Be the first to know when enrollment opens.
+                </p>
+                <form class="waitlist-form" id="waitlist-form" method="post">
+                    <label for="waitlist-email" class="visually-hidden">Email address</label>
+                    <input type="email" id="waitlist-email" name="email" class="waitlist-input" placeholder="Enter your email address..." autocomplete="email" maxlength="254" required>
+                    <button type="submit" class="pill pill-primary">Join Waitlist <span class="btn-arrow">&rarr;</span></button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 2rem 0; background-color: var(--color-bg-secondary); border-top: 1px solid rgba(0,0,0,0.05);">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <img src="assets/logo-grey.svg" alt="Interaction Labs Logo" style="height: 24px; width: auto;">
+                <p style="font-family: var(--font-family-body); font-size: 0.85rem; color: var(--color-gray-dark); margin-top: 0.5rem;">INTERACTION LABS &copy; 2025</p>
+            </div>
+            <div style="font-family: var(--font-family-body); font-size: 0.9rem; color: var(--color-gray-dark);">
+                Crafted for the future of digital products.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Snackbar (waitlist confirmation) -->
+    <div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+
+    <script>
+        // Counter roll-up animation for stats
+        function runCounters(container) {
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            var counters = container.querySelectorAll('.stat-counter:not([data-counted])');
+            counters.forEach(function (el) {
+                el.setAttribute('data-counted', 'true');
+                var target = parseInt(el.getAttribute('data-target'), 10) || 0;
+                var suffix = el.getAttribute('data-suffix') || '%';
+                var duration = 1200;
+                var start = performance.now();
+                function step(now) {
+                    var elapsed = now - start;
+                    var progress = Math.min(elapsed / duration, 1);
+                    // Smooth ease-out expo curve
+                    var ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                    var val = Math.round(ease * target);
+                    el.textContent = val + suffix;
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    }
+                }
+                requestAnimationFrame(step);
+            });
+        }
+
+        // Smooth entrance reveal observer for sections and cards
+        (function () {
+            if ('IntersectionObserver' in window) {
+                var revealObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-revealed');
+                            runCounters(entry.target);
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -30px 0px'
+                });
+
+                document.querySelectorAll('.reveal').forEach(function (el) {
+                    revealObserver.observe(el);
+                });
+            } else {
+                document.querySelectorAll('.reveal').forEach(function (el) {
+                    el.classList.add('is-revealed');
+                    runCounters(el);
+                });
+            }
+        })();
+
+        // Delightful gentle mouse parallax for 3D floating shapes
+        (function () {
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
+
+            var heroRibbon = document.querySelector('.hero-ribbon-wrapper');
+            var knotShape = document.querySelector('.knot-shape-wrapper');
+            if (!heroRibbon && !knotShape) return;
+
+            var targetX = 0, targetY = 0;
+            var currentX = 0, currentY = 0;
+            var ticking = false;
+
+            window.addEventListener('mousemove', function (e) {
+                var cx = window.innerWidth / 2;
+                var cy = window.innerHeight / 2;
+                targetX = (e.clientX - cx) / cx; // -1 to 1
+                targetY = (e.clientY - cy) / cy; // -1 to 1
+
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(updateParallax);
+                }
+            }, { passive: true });
+
+            function updateParallax() {
+                currentX += (targetX - currentX) * 0.05;
+                currentY += (targetY - currentY) * 0.05;
+
+                if (heroRibbon) {
+                    heroRibbon.style.transform = 'translate3d(' + (-currentX * 18).toFixed(2) + 'px, ' + (-currentY * 18).toFixed(2) + 'px, 0)';
+                }
+                if (knotShape) {
+                    knotShape.style.transform = 'translate3d(' + (currentX * 14).toFixed(2) + 'px, ' + (currentY * 14).toFixed(2) + 'px, 0)';
+                }
+
+                if (Math.abs(targetX - currentX) > 0.001 || Math.abs(targetY - currentY) > 0.001) {
+                    requestAnimationFrame(updateParallax);
+                } else {
+                    ticking = false;
+                }
+            }
+        })();
+
+        // Waitlist form: confirm locally with a snackbar instead of navigating away.
+        // TODO(security): No backend yet, so the email is not sent or stored anywhere.
+        // When connecting a waitlist service: POST over HTTPS, validate and rate-limit
+        // server-side, add CSRF protection if cookies are used, and serve this page with
+        // a strict CSP (hash or nonce for this inline script) and anti-clickjacking headers.
+        (function () {
+            var form = document.getElementById('waitlist-form');
+            var snackbar = document.getElementById('snackbar');
+            var hideTimer;
+
+            // Native validation (type="email" + required) blocks invalid submissions before this runs.
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                form.reset();
+
+                snackbar.textContent = 'Thank you! You\u2019re on the waitlist. We\u2019ll be in touch soon.';
+                snackbar.classList.add('is-visible');
+
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(function () {
+                    snackbar.classList.remove('is-visible');
+                }, 4000);
+            });
+        })();
+    </script>
+
+</body>
+</html>
