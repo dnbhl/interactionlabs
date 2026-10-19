@@ -1112,6 +1112,8 @@
                 <form class="waitlist-form" id="waitlist-form" method="post">
                     <label for="waitlist-email" class="visually-hidden">Email address</label>
                     <input type="email" id="waitlist-email" name="email" class="waitlist-input" placeholder="Enter your email address..." autocomplete="email" maxlength="254" required>
+                    <!-- Honeypot: hidden from people, bots fill it in and get ignored -->
+                    <input type="text" name="_honey" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
                     <button type="submit" class="pill pill-primary">Join Waitlist <span class="btn-arrow">&rarr;</span></button>
                 </form>
             </div>
@@ -1231,28 +1233,73 @@
             }
         })();
 
-        // Waitlist form: confirm locally with a snackbar instead of navigating away.
-        // TODO(security): No backend yet, so the email is not sent or stored anywhere.
-        // When connecting a waitlist service: POST over HTTPS, validate and rate-limit
-        // server-side, add CSRF protection if cookies are used, and serve this page with
-        // a strict CSP (hash or nonce for this inline script) and anti-clickjacking headers.
+        // Waitlist form: sends each signup to Rana's inbox via FormSubmit (formsubmit.co),
+        // then confirms with a snackbar instead of navigating away.
+        // FormSubmit only delivers after a one-time activation link it emails to the
+        // address below. After activating, you can swap the address for the random
+        // alias FormSubmit gives you, so your email isn't visible in the page source.
         (function () {
+            var FORM_ENDPOINT = 'https://formsubmit.co/ajax/ranaabdallaa@gmail.com';
+
             var form = document.getElementById('waitlist-form');
             var snackbar = document.getElementById('snackbar');
+            var button = form.querySelector('button[type="submit"]');
+            var buttonHTML = button.innerHTML;
             var hideTimer;
 
-            // Native validation (type="email" + required) blocks invalid submissions before this runs.
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                form.reset();
-
-                snackbar.textContent = 'Thank you! You\u2019re on the waitlist. We\u2019ll be in touch soon.';
+            function showSnackbar(message) {
+                snackbar.textContent = message;
                 snackbar.classList.add('is-visible');
-
                 clearTimeout(hideTimer);
                 hideTimer = setTimeout(function () {
                     snackbar.classList.remove('is-visible');
                 }, 4000);
+            }
+
+            // Native validation (type="email" + required) blocks invalid submissions before this runs.
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // Bot filled the hidden field: pretend it worked, send nothing.
+                if (form.elements['_honey'].value) {
+                    form.reset();
+                    showSnackbar('Thank you! You\u2019re on the waitlist. We\u2019ll be in touch soon.');
+                    return;
+                }
+
+                var email = form.elements['email'].value.trim();
+                button.disabled = true;
+                button.textContent = 'Joining\u2026';
+
+                fetch(FORM_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        interest: 'Early access waitlist (self-paced video courses)',
+                        page: window.location.href,
+                        _subject: 'New Interaction Labs waitlist signup: ' + email,
+                        _template: 'table'
+                    })
+                })
+                    .then(function (response) {
+                        return response.json().then(function (data) {
+                            if (!response.ok || String(data.success) !== 'true') {
+                                throw new Error(data.message || 'Submission failed');
+                            }
+                        });
+                    })
+                    .then(function () {
+                        form.reset();
+                        showSnackbar('Thank you! You\u2019re on the waitlist. We\u2019ll be in touch soon.');
+                    })
+                    .catch(function () {
+                        showSnackbar('Something went wrong. Please try again in a moment.');
+                    })
+                    .finally(function () {
+                        button.disabled = false;
+                        button.innerHTML = buttonHTML;
+                    });
             });
         })();
 
