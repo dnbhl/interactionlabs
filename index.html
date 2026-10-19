@@ -1271,8 +1271,13 @@
                 button.disabled = true;
                 button.textContent = 'Joining\u2026';
 
+                // Give up after 15s so the button never stays stuck on "Joining…".
+                var controller = new AbortController();
+                var timeout = setTimeout(function () { controller.abort(); }, 15000);
+
                 fetch(FORM_ENDPOINT, {
                     method: 'POST',
+                    signal: controller.signal,
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
                         email: email,
@@ -1297,6 +1302,7 @@
                         showSnackbar('Something went wrong. Please try again in a moment.');
                     })
                     .finally(function () {
+                        clearTimeout(timeout);
                         button.disabled = false;
                         button.innerHTML = buttonHTML;
                     });
