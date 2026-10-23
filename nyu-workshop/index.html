@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cracking the Whiteboard · UX Club @ NYU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; background: #1b1830; overflow: hidden; }
+  body { -webkit-font-smoothing: antialiased; }
+  #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  #deck { position: relative; width: 1920px; height: 1080px; flex: none; transform-origin: center center; }
+  #deck > section {
+    position: absolute; inset: 0; width: 1920px; height: 1080px; box-sizing: border-box;
+    overflow: hidden; display: flex; flex-direction: column;
+    opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
+  }
+  #deck > section.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+  #deck *, #deck *::before, #deck *::after { box-sizing: border-box; }
+  #deck h1, #deck h2, #deck h3, #deck p, #deck table { margin: 0; }
+  #deck h1 { line-height: 1.1; } #deck h2 { line-height: 1.15; } #deck h3 { line-height: 1.2; }
+  #deck p { line-height: 1.4; }
+  #deck div { display: flex; flex-direction: column; min-width: 0; }
+  #deck img { display: block; flex: none; }
+  #deck a { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
+  #deck table { border-collapse: collapse; width: 100%; }
+  #deck td, #deck th { padding: .35em .6em; text-align: left; vertical-align: top; border-bottom: 1px solid rgba(91,82,146,.18); }
+  #hint {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    font: 13px/1.4 'DM Mono', monospace; color: #e4ddff; background: rgba(27,24,48,.85);
+    padding: 8px 14px; border-radius: 999px; transition: opacity .6s; pointer-events: none;
+  }
+  #hint.hide { opacity: 0; }
+  body.idle { cursor: none; }
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<section id="cover" data-transition="fade" style="display:flex; flex-direction:column; align-items:start; justify-content:space-between; padding:128px; background:radial-gradient(ellipse at 85% 35%, #e1d6ff 0%, #f2edff 62%)">
+  <img src="assets/holographic-blobs.png" alt="" style="position:absolute; top:560px; left:1010px; width:380px; height:380px; object-fit:contain; opacity:0.9">
+  <img src="assets/ribbon-knot.png" alt="Lavender 3D ribbon knot" style="position:absolute; top:64px; left:1190px; width:586px; height:880px; object-fit:contain">
+  <img src="assets/rc-dark.png" alt="Rana Caltrider" style="width:384px; height:44px; object-fit:contain">
+  <div style="width:1000px; display:flex; flex-direction:column; gap:32px">
+    <p style="font-family:'DM Mono', 'Courier New', monospace; font-size:24px; letter-spacing:2px; text-transform:uppercase; color:#4d588c"><span style="color:#02afb9">//</span> Workshop</p>
+    <h1 style="font-family:'Schibsted Grotesk', Arial, sans-serif; font-size:136px; font-weight:500; line-height:0.95; letter-spacing:-3px; color:#5b5292">Cracking the whiteboard</h1>
+    <p style="font-family:'DM Mono', 'Courier New', monospace; font-size:32px; line-height:1.4; color:#4d588c">Interview process &amp; whiteboard prep</p>
+  </div>
+  <div style="display:flex; flex-direction:row; gap:16px">
+    <p style="padding:12px 28px; font-family:'DM Mono', 'Courier New', monospace; font-size:24px; color:#fffcf5; background:#5b5292; border-radius:40px">UX Club @ NYU</p>
+    <p style="padding:10px 28px; font-family:'DM Mono', 'Courier New', monospace; font-size:24px; color:#5b5292; border:2px solid #5b5292; border-radius:40px">Fri, Oct 23 · 5–7pm</p>
+  </div>
+  
+</section>
+<section id="agenda" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Tonight</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Two hours, two halves</h2>
+</div>
+<table style="font-family:'DM Mono', 'Courier New', monospace;font-size:28px;color:#4D588C;border-top:2px solid #D9D0F7">
+<tr><td style="width:14%;padding:14px 20px;color:#5B5292">5:00</td><td style="width:38%;color:#5B5292">Welcome &amp; intro</td><td style="width:48%">Who I am and why this matters</td></tr>
+<tr><td>5:10</td><td style="color:#5B5292">The interview process</td><td>What a typical loop looks like</td></tr>
+<tr><td>5:25</td><td style="color:#5B5292">Whiteboard prep</td><td>What’s graded, a framework, pitfalls</td></tr>
+<tr><td>5:40</td><td style="color:#5B5292">Q&amp;A</td><td>Ask me anything</td></tr>
+<tr><td>5:50</td><td style="color:#5B5292">Workshop setup</td><td>The prompt, teams and roles</td></tr>
+<tr style="background:#F2EDFF"><td>6:00</td><td style="color:#5B5292">Team challenge</td><td>Hands-on, 30 minutes</td></tr>
+<tr style="background:#F2EDFF"><td>6:30</td><td style="color:#5B5292">Share-outs</td><td>3 minutes per team + feedback</td></tr>
+<tr><td>6:55</td><td style="color:#5B5292">Wrap-up</td><td>Thanks &amp; next steps</td></tr>
+</table>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 02</p>
+
+</section>
+<section id="about" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between">
+<img src="assets/holographic-blobs.png" alt="" style="position:absolute;left:1290px;top:72px;width:500px;height:500px;object-fit:contain">
+<div style="display:flex;flex-direction:column;gap:32px;width:1080px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> About me</p>
+<h1 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:150px;font-weight:500;line-height:1;letter-spacing:-5px;color:#5B5292">Hi, I’m Rana.</h1>
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:400;line-height:1.3;color:#4D588C;width:940px">An interaction designer for 10 years, working where AI meets enterprise. A teacher at heart.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:64px">
+<div style="flex:6;border-top:2px solid #C9BEF2;padding:28px 0 0 0;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#4D588C">Earlier · 6 years</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">IBM, Consulting and Start-up</h3>
+<p style="font-size:24px;line-height:1.45;color:#4D588C">Senior design consultant at IBM across airlines, banking, insurance and loyalty</p>
+</div>
+<div style="flex:4;border-top:2px solid #5B5292;padding:28px 0 0 0;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#5B5292">Now · 4 years</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Google</h3>
+<p style="font-size:24px;line-height:1.45;color:#4D588C">Gemini Enterprise, Agent Builder and Conversational Search. Shown at I/O and Cloud Next</p>
+</div>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 03</p>
+
+</section>
+<section id="div1" data-transition="push" style="background:#5B5292;color:#FFFCF5;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+<img src="assets/shape-glassy.png" alt="" style="position:absolute;left:1180px;top:64px;width:587px;height:880px;object-fit:contain">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:200px;font-weight:500;line-height:1;letter-spacing:-4px;color:#B9D9F8">01</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:112px;font-weight:500;line-height:1;letter-spacing:-3px;color:#FFFCF5;width:860px">The interview process</h2>
+<p style="font-size:32px;line-height:1.4;color:#E4DDFF;width:820px">What a typical loop looks like, and what each round is really testing.</p>
+<img src="assets/rc-light.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#E4DDFF">UX Club @ NYU <span style="color:#B9D9F8">//</span> 04</p>
+
+</section>
+<section id="loop" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> The loop</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">A typical design interview loop</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:stretch">
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;color:#4D588C"><span style="color:#02AFB9">//</span> 01 · 20–30 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;line-height:1.1;color:#5B5292">Recruiter screen</h3>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">Is this person a fit for the level and the role?</p>
+</div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;color:#4D588C"><span style="color:#02AFB9">//</span> 02 · 30–45 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;line-height:1.1;color:#5B5292">Hiring manager</h3>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">Can they own the kind of problems we have?</p>
+</div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;color:#4D588C"><span style="color:#02AFB9">//</span> 03 · 45–60 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;line-height:1.1;color:#5B5292">Portfolio review</h3>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">How do they think, decide and influence?</p>
+</div>
+<div style="flex:1;background:#5B5292;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;color:#E4DDFF"><span style="color:#B9D9F8">//</span> 04 · 45–60 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;line-height:1.1;color:#FFFCF5">Design challenge</h3>
+<p style="font-size:24px;line-height:1.4;color:#E4DDFF">How do they approach a problem they’ve never seen?</p>
+<p style="font-size:24px;padding:6px 18px;border-radius:24px;background:#FFC157;color:#2B2B2B;align-self:flex-start">Tonight</p>
+</div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;color:#4D588C"><span style="color:#02AFB9">//</span> 05 · 30–45 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;line-height:1.1;color:#5B5292">Team rounds</h3>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">Would we want to build with them every day?</p>
+</div>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">Order and names vary by company. Big tech often adds a team-match step after the onsite.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 05</p>
+
+</section>
+<section id="formats" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Formats</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Three kinds of design challenge</h2>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:row;gap:24px;align-items:flex-start">
+<img src="assets/orb-lavender.png" alt="" style="width:64px;height:62px;object-fit:contain;flex:none">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;color:#4D588C">Live · 45–60 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#5B5292">Blue sky</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">An open prompt, no existing product. You drive the whole process; the interviewer mostly answers questions.</p>
+<p style="font-size:24px;line-height:1.4;color:#5B5292">Shows: structure, curiosity, pace.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:row;gap:24px;align-items:flex-start">
+<img src="assets/orb-pink.png" alt="" style="width:64px;height:62px;object-fit:contain;flex:none">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;color:#4D588C">Live · 45–60 min</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#5B5292">Collaborative</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">The interviewer plays your PM or teammate. They push back, add constraints and build with you.</p>
+<p style="font-size:24px;line-height:1.4;color:#5B5292">Shows: listening, adapting, holding a position calmly.</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:row;gap:24px;align-items:flex-start">
+<img src="assets/orb-gold.png" alt="" style="width:64px;height:62px;object-fit:contain;flex:none">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;color:#4D588C">Async or live</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#5B5292">Take-home or critique</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Design on your own time and present it, or critique an existing product out loud.</p>
+<p style="font-size:24px;line-height:1.4;color:#5B5292">Shows: craft, judgment, a clear story.</p>
+</div>
+</div>
+</div>
+<p style="font-size:24px;line-height:1.4;color:#4D588C">Tonight: blue sky, with a classmate playing the interviewer.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 06</p>
+
+</section>
+<section id="div2" data-transition="push" style="background:#5B5292;color:#FFFCF5;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+<img src="assets/shape-pastel.png" alt="" style="position:absolute;left:1180px;top:64px;width:587px;height:880px;object-fit:contain">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:200px;font-weight:500;line-height:1;letter-spacing:-4px;color:#B9D9F8">02</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:112px;font-weight:500;line-height:1;letter-spacing:-3px;color:#FFFCF5;width:860px">Whiteboard prep</h2>
+<p style="font-size:32px;line-height:1.4;color:#E4DDFF;width:820px">What interviewers look for, a framework to lean on, and the traps to avoid.</p>
+<img src="assets/rc-light.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#E4DDFF">UX Club @ NYU <span style="color:#B9D9F8">//</span> 07</p>
+
+</section>
+<section id="whatitis" data-transition="fade" style="background:radial-gradient(ellipse at 90% 50%, #E1D6FF 0%, #F2EDFF 60%);color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<img src="assets/ribbon-knot.png" alt="" style="position:absolute;left:1250px;top:96px;width:520px;height:780px;object-fit:contain">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> What it is</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:112px;font-weight:500;line-height:1;letter-spacing:-3px;color:#5B5292;width:1060px">They’re grading your thinking, out loud.</h2>
+<p style="font-size:32px;line-height:1.45;color:#4D588C;width:980px">A prompt you’ve never seen. 45–60 minutes. A marker, a whiteboard and an interviewer playing your stakeholder. The polish of the final sketch matters least.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 08</p>
+
+</section>
+<section id="lookfor" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> The scorecard</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">What interviewers look for</h2>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">01</p>
+<h3 style="width:520px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Clarifying questions</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">You scope the problem before you solve it.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">02</p>
+<h3 style="width:520px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">User focus</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">You pick a specific user and keep coming back to them.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">03</p>
+<h3 style="width:520px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Prioritization</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">You decide what matters most and say what you’re cutting.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">04</p>
+<h3 style="width:520px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Communication</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">You think out loud and bring the interviewer along.</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7;border-bottom:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">05</p>
+<h3 style="width:520px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Tradeoffs &amp; metrics</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">You name what you gave up and how you’d measure success.</p>
+</div>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 09</p>
+
+</section>
+<section id="framework" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> The framework</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Seven steps to lean on</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:16px;align-items:stretch">
+<div style="flex:3;display:flex;flex-direction:column;gap:20px">
+<div style="border-top:6px solid #5B5292;padding:14px 0 0 0"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#5B5292">Understand</p></div>
+<div style="flex:1;display:flex;flex-direction:row;gap:16px">
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">01</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">Clarify</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">Ask questions. State assumptions.</p></div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">02</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">User &amp; goal</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">One user, one problem.</p></div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">03</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">Prioritize</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">Choose what matters. Cut the rest.</p></div>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:20px">
+<div style="border-top:6px solid #02AFB9;padding:14px 0 0 0"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#5B5292">Explore</p></div>
+<div style="flex:1;display:flex;flex-direction:row;gap:16px">
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">04</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">Ideate</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">Go wide, then pick a direction.</p></div>
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">05</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">Sketch</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">Draw the key moments, not every screen.</p></div>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:20px">
+<div style="border-top:6px solid #FFC157;padding:14px 0 0 0"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#5B5292">Land it</p></div>
+<div style="flex:1;display:flex;flex-direction:row;gap:16px">
+<div style="flex:1;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#00808A">06</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#5B5292">Tradeoffs</h3><p style="font-size:24px;line-height:1.35;color:#4D588C">Say what you gave up, and why.</p></div>
+<div style="flex:1;background:#5B5292;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;color:#B9D9F8">07</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.1;color:#FFFCF5">Measure</h3><p style="font-size:24px;line-height:1.35;color:#E4DDFF">How would you know it worked?</p></div>
+</div>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Real interviews loop back. Naming the step you’re on keeps you, and them, oriented.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 10</p>
+
+</section>
+<section id="budget" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Timing</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Spending a 45-minute challenge</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:row">
+<div style="flex:8;background:#5B5292;border-radius:20px 0 0 20px;padding:28px 20px"><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#FFFCF5">8 min</p></div>
+<div style="flex:10;background:#4D588C;padding:28px 20px"><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#FFFCF5">10 min</p></div>
+<div style="flex:15;background:#B9D9F8;padding:28px 20px"><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#2B2B2B">15 min</p></div>
+<div style="flex:8;background:#02AFB9;padding:28px 20px"><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#2B2B2B">8 min</p></div>
+<div style="flex:4;background:#D9D0F7;border-radius:0 20px 20px 0;padding:28px 20px"><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#2B2B2B">4 min</p></div>
+</div>
+<div style="display:flex;flex-direction:row">
+<div style="flex:8;padding:0 20px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:500;color:#5B5292">Clarify &amp; user</h3><p style="font-size:24px;line-height:1.35">Questions, assumptions, one user</p></div>
+<div style="flex:10;padding:0 20px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:500;color:#5B5292">Prioritize &amp; ideate</h3><p style="font-size:24px;line-height:1.35">What matters most; go wide, then choose</p></div>
+<div style="flex:15;padding:0 20px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:500;color:#5B5292">Sketch</h3><p style="font-size:24px;line-height:1.35">The key moments of the flow</p></div>
+<div style="flex:8;padding:0 20px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:500;color:#5B5292">Walkthrough</h3><p style="font-size:24px;line-height:1.35">Narrate it as the user; name tradeoffs</p></div>
+<div style="flex:4;padding:0 8px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:500;color:#5B5292">Wrap</h3><p style="font-size:24px;line-height:1.35">Metrics, your questions</p></div>
+</div>
+</div>
+<div style="background:#F2EDFF;border-left:8px solid #FFC157;border-radius:0 20px 20px 0;padding:32px 40px">
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">The classic trap:</span> 25 minutes of clarifying, then a rushed sketch. Say your plan out loud: “I’ll spend about five minutes on questions.”</p>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 11</p>
+
+</section>
+<section id="clarify" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Step 01</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Questions worth asking first</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Who</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">Who is this for, and who is it not for?</h3></div>
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Problem</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">What’s frustrating about how they do this today?</h3></div>
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Context</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">Where and when will they use it?</h3></div>
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Constraints</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">Any limits on platform, budget or time?</h3></div>
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Success</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">What would make this a win for the business?</h3></div>
+<div style="background:#FFFCF5;border:2px solid #D9D0F7;border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px"><p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#00808A">Scope</p><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">Is this new, or part of an existing product?</h3></div>
+</div>
+<div style="background:#FFFCF5;border-left:8px solid #FFC157;border-radius:0 20px 20px 0;padding:24px 40px">
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">Then commit:</span> “I’ll assume ___. Tell me if that’s off.”</p>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 12</p>
+
+</section>
+<section id="pitfalls" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Pitfalls</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Common traps, and what to do instead</h2>
+</div>
+<table style="font-family:'DM Mono', 'Courier New', monospace;font-size:28px;color:#4D588C">
+<tr style="background:#5B5292"><th style="width:40%;padding:16px 24px;color:#FFFCF5;font-weight:500;text-align:left">The trap</th><th style="width:60%;color:#FFFCF5;font-weight:500;text-align:left">Try this instead</th></tr>
+<tr><td style="color:#5B5292">Jumping straight to screens</td><td>Spend the first minutes on who and why.</td></tr>
+<tr style="background:#F2EDFF"><td style="color:#5B5292">Designing for “everyone”</td><td>Pick one user. Mention others later.</td></tr>
+<tr><td style="color:#5B5292">Drawing in silence</td><td>Narrate what you’re doing and why.</td></tr>
+<tr style="background:#F2EDFF"><td style="color:#5B5292">Trying to solve everything</td><td>Choose one core flow and go deep.</td></tr>
+<tr><td style="color:#5B5292">Treating pushback as attack</td><td>Treat it as input: “Good point, here’s how I’d adjust.”</td></tr>
+<tr style="background:#F2EDFF"><td style="color:#5B5292">Running out of time</td><td>Save the last 8–10 minutes for the walkthrough.</td></tr>
+</table>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 13</p>
+
+</section>
+<section id="balance" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> The overlap</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Balance the user and the business</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:72px;align-items:center">
+<div style="position:relative;width:760px;height:520px">
+<img src="assets/venn.png" alt="Venn diagram: user needs and business goals overlap in your design" style="width:760px;height:520px;object-fit:contain">
+<p style="position:absolute;left:50px;top:222px;width:200px;text-align:center;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#5B5292">User needs</p>
+<p style="position:absolute;left:520px;top:222px;width:200px;text-align:center;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;line-height:1.2;color:#4D588C">Business goals</p>
+<p style="position:absolute;left:300px;top:226px;width:160px;text-align:center;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:28px;font-weight:600;line-height:1.2;color:#1E2340">Your design</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">Name both, out loud.</span> “The user wants X; the business needs Y.”</p>
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">Give each a metric.</span> Time to complete a task; retention or revenue.</p>
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">When they clash, pick a side</span> and explain why.</p>
+<div style="background:#FFFCF5;border-radius:20px;padding:28px 32px;border:2px solid #D9D0F7">
+<p style="font-size:24px;line-height:1.45;color:#4D588C">e.g. a grocery app: users want to reorder in seconds; the business wants bigger baskets. One-tap reorder with a “running low?” nudge serves both.</p>
+</div>
+</div>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 14</p>
+
+</section>
+<section id="story" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Storytelling</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Present it as a story</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:24px;align-items:stretch">
+<div style="flex:1;background:#F2EDFF;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px;border-top:8px solid #5B5292">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:72px;font-weight:500;line-height:1;color:#5B5292">01</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Setup</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Who is the user, and what’s their pain?</p>
+</div>
+<div style="flex:1;background:#F2EDFF;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px;border-top:8px solid #4D588C">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:72px;font-weight:500;line-height:1;color:#5B5292">02</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Tension</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">What constraints shaped you? What did you cut?</p>
+</div>
+<div style="flex:1;background:#F2EDFF;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px;border-top:8px solid #02AFB9">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:72px;font-weight:500;line-height:1;color:#5B5292">03</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Resolution</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Walk the flow as the user, step by step.</p>
+</div>
+<div style="flex:1;background:#F2EDFF;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:20px;border-top:8px solid #FFC157">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:72px;font-weight:500;line-height:1;color:#5B5292">04</p>
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Reflection</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Tradeoffs, risks, and what you’d test next.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Start with a person, not a product: “Meet Dana, a night-shift nurse who…”</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 15</p>
+
+</section>
+<section id="div3" data-transition="push" style="background:#5B5292;color:#FFFCF5;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+<img src="assets/shape-ribbon-loop.png" alt="" style="position:absolute;left:1040px;top:120px;width:740px;height:740px;object-fit:contain">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:200px;font-weight:500;line-height:1;letter-spacing:-4px;color:#B9D9F8">03</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:112px;font-weight:500;line-height:1;letter-spacing:-3px;color:#FFFCF5;width:900px">Your turn</h2>
+<p style="font-size:32px;line-height:1.4;color:#E4DDFF;width:820px">One prompt, five teams, thirty minutes. Then we compare approaches.</p>
+<img src="assets/rc-light.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#E4DDFF">UX Club @ NYU <span style="color:#B9D9F8">//</span> 16</p>
+
+</section>
+<section id="prompt" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:48px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;padding:8px 22px;border-radius:40px;background:#FFC157;color:#2B2B2B">The prompt</p>
+<h1 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:144px;font-weight:500;line-height:1;letter-spacing:-4px;color:#5B5292;width:1500px">Design the world’s simplest alarm clock.</h1>
+<div style="display:flex;flex-direction:row;gap:16px">
+<p style="font-size:24px;padding:8px 24px;border-radius:40px;border:2px solid #5B5292;color:#5B5292">30 minutes</p>
+<p style="font-size:24px;padding:8px 24px;border-radius:40px;border:2px solid #5B5292;color:#5B5292">Teams of 4–5</p>
+<p style="font-size:24px;padding:8px 24px;border-radius:40px;border:2px solid #5B5292;color:#5B5292">One whiteboard each</p>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 17</p>
+
+</section>
+<section id="roles" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> Teams</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Two roles on every team</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="border-top:6px solid #5B5292;padding:14px 0 0 0"><p style="font-size:24px;letter-spacing:1px;text-transform:uppercase;color:#5B5292">1 per team</p></div>
+<div style="flex:1;background:#5B5292;border-radius:24px;padding:44px;display:flex;flex-direction:column;gap:20px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#FFFCF5">Interviewer</h3><p style="font-size:28px;line-height:1.4;color:#E4DDFF">Holds the card and answers the team’s questions. Doesn’t design. Gives feedback after the share-out.</p></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="border-top:6px solid #02AFB9;padding:14px 0 0 0"><p style="font-size:24px;letter-spacing:1px;text-transform:uppercase;color:#5B5292">Everyone else</p></div>
+<div style="flex:1;background:#F2EDFF;border-radius:24px;padding:44px;display:flex;flex-direction:column;gap:20px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#5B5292">Designers</h3><p style="font-size:28px;line-height:1.4;color:#4D588C">Work through the challenge together. Ask questions, think out loud and sketch on the whiteboard.</p></div>
+</div>
+</div>
+<div style="background:#F2EDFF;border-left:8px solid #FFC157;border-radius:0 20px 20px 0;padding:24px 40px">
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">One rule:</span> everyone holds the marker at least once, and everyone speaks in the share-out.</p>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 18</p>
+
+</section>
+<section id="checkpoints" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> 6:00–6:30</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">30 minutes, four checkpoints</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:row">
+<div style="flex:8;background:#5B5292;border-radius:20px 0 0 20px;padding:28px 20px;display:flex;flex-direction:column;gap:4px"><p style="font-size:24px;color:#E4DDFF">6:00</p><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#FFFCF5">8 min</p></div>
+<div style="flex:7;background:#4D588C;padding:28px 20px;display:flex;flex-direction:column;gap:4px"><p style="font-size:24px;color:#E4DDFF">6:08</p><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#FFFCF5">7 min</p></div>
+<div style="flex:12;background:#B9D9F8;padding:28px 20px;display:flex;flex-direction:column;gap:4px"><p style="font-size:24px;color:#2B2B2B">6:15</p><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#2B2B2B">12 min</p></div>
+<div style="flex:3;background:#D9D0F7;border-radius:0 20px 20px 0;padding:28px 16px;display:flex;flex-direction:column;gap:4px"><p style="font-size:24px;color:#2B2B2B">6:27</p><p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:36px;font-weight:500;color:#2B2B2B">3’</p></div>
+</div>
+<div style="display:flex;flex-direction:row">
+<div style="flex:8;padding:0 24px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;color:#5B5292">Clarify</h3><p style="font-size:24px;line-height:1.4">Question your interviewer. Agree on who it’s for and what “simple” means to them.</p></div>
+<div style="flex:7;padding:0 24px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;color:#5B5292">Ideas</h3><p style="font-size:24px;line-height:1.4">Everyone throws out ideas. Pick one direction.</p></div>
+<div style="flex:12;padding:0 24px 0 0;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;color:#5B5292">Sketch</h3><p style="font-size:24px;line-height:1.4">Draw the clock and how someone sets the alarm and stops it.</p></div>
+<div style="flex:3;display:flex;flex-direction:column;gap:8px"><h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;color:#5B5292">Prep</h3><p style="font-size:24px;line-height:1.4">Who says what</p></div>
+</div>
+</div>
+<div style="background:#FFFCF5;border-left:8px solid #FFC157;border-radius:0 20px 20px 0;padding:24px 40px">
+<p style="font-size:28px;line-height:1.45;color:#4D588C"><span style="color:#5B5292">I’ll call time</span> at each checkpoint. Just move on to the next step.</p>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 19</p>
+
+</section>
+<section id="show" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> The goal</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">By 6:30, be ready to show</h2>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">01</p>
+<h3 style="width:360px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Who</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">Who it’s for, and what bugs them about alarms today</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">02</p>
+<h3 style="width:360px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Focus</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">The one thing the clock must do well for them</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">03</p>
+<h3 style="width:360px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Cuts</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">What you removed, and why</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">04</p>
+<h3 style="width:360px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Sketch</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">How they set the alarm, and how they stop it</p>
+</div>
+<div style="display:flex;flex-direction:row;gap:48px;align-items:center;padding:22px 0;border-top:2px solid #D9D0F7;border-bottom:2px solid #D9D0F7">
+<p style="width:72px;font-size:28px;color:#00808A">05</p>
+<h3 style="width:360px;font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:40px;font-weight:500;line-height:1.1;color:#5B5292">Proof</h3>
+<p style="flex:1;font-size:28px;line-height:1.4;color:#4D588C">One tradeoff you made, and how you’d know it works</p>
+</div>
+</div>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 20</p>
+
+</section>
+<section id="shareout" data-transition="fade" style="background:#F2EDFF;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> 6:30–6:55</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">Share-outs: three plus two</h2>
+</div>
+<div style="display:flex;flex-direction:row;gap:32px;align-items:stretch">
+<div style="flex:3;background:#5B5292;border-radius:24px;padding:48px;display:flex;flex-direction:row;gap:48px;align-items:center">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:200px;font-weight:500;line-height:1;letter-spacing:-6px;color:#FFFCF5">3</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#FFFCF5">Minutes to present</h3>
+<p style="font-size:28px;line-height:1.4;color:#E4DDFF">Who → focus → sketch → one tradeoff. Everyone on the team speaks.</p>
+</div>
+</div>
+<div style="flex:2;background:#FFFCF5;border:2px solid #D9D0F7;border-radius:24px;padding:48px;display:flex;flex-direction:row;gap:40px;align-items:center">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:200px;font-weight:500;line-height:1;letter-spacing:-6px;color:#5B5292">2</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:44px;font-weight:500;line-height:1.1;color:#5B5292">For feedback</h3>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">From your interviewer: one win, one push.</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Present to the whole room, pitching to your interviewer as if it were the real thing. I’ll keep time.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 21</p>
+
+</section>
+<section id="rubric" data-transition="fade" style="background:#FFFCF5;color:#4D588C;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#4D588C"><span style="color:#02AFB9">//</span> For interviewers</p>
+<h2 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:80px;font-weight:500;line-height:1;letter-spacing:-2px;color:#5B5292">The feedback rubric</h2>
+</div>
+<table style="font-family:'DM Mono', 'Courier New', monospace;font-size:28px;color:#4D588C">
+<tr style="background:#5B5292"><th style="width:30%;padding:16px 24px;color:#FFFCF5;font-weight:500;text-align:left">Criteria</th><th style="width:56%;color:#FFFCF5;font-weight:500;text-align:left">Strong looks like</th><th style="width:14%;color:#FFFCF5;font-weight:500;text-align:left">Score</th></tr>
+<tr><td style="color:#5B5292">Clarifying questions</td><td>Asked about user and goal before drawing</td><td>1–5</td></tr>
+<tr style="background:#F2EDFF"><td style="color:#5B5292">User focus</td><td>One specific user, referenced throughout</td><td>1–5</td></tr>
+<tr><td style="color:#5B5292">Prioritization</td><td>Clear on what’s in, what’s out, and why</td><td>1–5</td></tr>
+<tr style="background:#F2EDFF"><td style="color:#5B5292">Communication</td><td>Thought out loud; easy to follow</td><td>1–5</td></tr>
+<tr><td style="color:#5B5292">Tradeoffs &amp; metrics</td><td>Named what they gave up and how to measure it</td><td>1–5</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#4D588C">Then share <span style="color:#5B5292">one thing that worked</span> and <span style="color:#5B5292">one thing to push on</span>.</p>
+<img src="assets/rc-dark.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#4D588C">UX Club @ NYU <span style="color:#02AFB9">//</span> 22</p>
+
+</section>
+<section id="thanks" data-transition="fade" style="background:#5B5292;color:#FFFCF5;font-family:'DM Mono', 'Courier New', monospace;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<img src="assets/ribbon-knot-purple.png" alt="" style="position:absolute;left:1120px;top:120px;width:680px;height:680px;object-fit:contain">
+<p style="font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#E4DDFF"><span style="color:#B9D9F8">//</span> Wrap-up</p>
+<h1 style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:160px;font-weight:500;line-height:1;letter-spacing:-4px;color:#FFFCF5">Thank you.</h1>
+<p style="font-size:32px;line-height:1.45;color:#E4DDFF;width:900px">Keep practicing: one prompt a week, out loud, with a timer.</p>
+<div style="display:flex;flex-direction:row;gap:24px;width:960px">
+<div style="flex:1;background:#4E4686;border:2px solid #6F66AA;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<img src="assets/il-light.png" alt="Interaction Labs" style="width:276px;height:32px;object-fit:contain">
+<p style="font-size:24px;line-height:1.4;color:#E4DDFF">Request early access at interactionlabs.io</p>
+</div>
+<div style="flex:1;background:#4E4686;border:2px solid #6F66AA;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:16px">
+<p style="font-family:'Schibsted Grotesk', Arial, sans-serif;font-size:32px;font-weight:500;color:#FFFCF5">Let’s connect</p>
+<p style="font-size:24px;line-height:1.4;color:#E4DDFF"><a href="https://www.linkedin.com/in/ranaabdalla/">linkedin.com/in/ranaabdalla</a></p>
+</div>
+</div>
+<img src="assets/rc-light.png" alt="Rana Caltrider" style="position:absolute;left:128px;bottom:64px;width:207px;height:24px;object-fit:contain">
+<p style="position:absolute;right:128px;bottom:60px;width:600px;text-align:right;font-size:24px;color:#E4DDFF">UX Club @ NYU <span style="color:#B9D9F8">//</span> 23</p>
+
+</section>
+</div></div>
+<div id="hint">← → to move · F for full screen</div>
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(deck.children);
+  var hint = document.getElementById('hint');
+  var cur = 0;
+  function fit() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  function go(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[cur].classList.remove('on');
+    cur = i;
+    slides[cur].classList.add('on');
+    if (history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
+  }
+  function fromHash() {
+    var n = parseInt((location.hash || '').slice(1), 10);
+    return isNaN(n) ? 0 : n - 1;
+  }
+  function full() {
+    if (!document.fullscreenElement) { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
+    else { document.exitFullscreen && document.exitFullscreen(); }
+  }
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown' || k === ' ' || k === 'Enter') { e.preventDefault(); go(cur + 1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp' || k === 'Backspace') { e.preventDefault(); go(cur - 1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(slides.length - 1);
+    else if (k === 'f' || k === 'F') full();
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a')) return;
+    go(e.clientX > window.innerWidth / 3 ? cur + 1 : cur - 1);
+  });
+  var tx = null;
+  document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+  });
+  var idle;
+  document.addEventListener('mousemove', function () {
+    document.body.classList.remove('idle');
+    clearTimeout(idle);
+    idle = setTimeout(function () { document.body.classList.add('idle'); }, 2500);
+  });
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', function () { go(fromHash()); });
+  setTimeout(function () { hint.classList.add('hide'); }, 4000);
+  fit();
+  slides[cur].classList.add('on');
+  go(fromHash());
+})();
+</script>
+</body>
+</html>
